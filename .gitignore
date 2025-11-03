@@ -52,6 +52,7 @@ cover.*
 
 # Config (sensitive data)
 config/config.yaml
+config/config.backup.*.yaml
 
 # Keep example config
 !config/config.yaml.example
@@ -61,7 +62,13 @@ config/config.yaml
 .coverage
 htmlcov/
 .tox/
+tests/__pycache__/
 
 # System
 .directory
 Thumbs.db
+.gitconfig
+
+# Backup files
+*.backup
+*~

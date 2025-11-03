@@ -16,8 +16,8 @@
         <header>
             <h1>🎵 CD-Ripper</h1>
             <div class="header-actions">
-                <button id="ejectBtn" class="btn btn-warning">⏏️ Auswerfen</button>
-                <button id="configBtn" class="btn btn-primary">⚙️ Einstellungen</button>
+                <button id="ejectBtn" class="btn btn-primary">⏏️<span class="btn-text"> Auswerfen</span></button>
+                <button id="configBtn" class="btn btn-primary">⚙️<span class="btn-text"> Einstellungen</span></button>
             </div>
         </header>
 
@@ -25,9 +25,10 @@
         <section class="main-status">
             <!-- Album Cover - mittig -->
             <div class="cd-cover-container" id="cdCoverContainer">
-                <div class="cd-cover-placeholder">
+                <div class="cd-cover-placeholder" id="coverPlaceholder">
                     <span class="cd-icon">💿</span>
                 </div>
+                <img src="" alt="Album Cover" class="cd-cover-image" id="coverImage" style="display: none;">
             </div>
 
             <!-- Album Info -->

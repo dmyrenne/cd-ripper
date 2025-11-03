@@ -4,7 +4,7 @@ CD-Ripper Web Interface
 Status-Anzeige und Konfigurations-Editor
 """
 
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request, send_from_directory, send_file
 from flask_cors import CORS
 import yaml
 import logging
@@ -14,11 +14,17 @@ from typing import Dict, Any, Optional
 import threading
 import time
 from datetime import datetime
+import io
+
+from shared_status import SharedStatus
 
 app = Flask(__name__, 
             template_folder='../web/templates',
             static_folder='../web/static')
 CORS(app)
+
+# Shared Status
+shared_status = SharedStatus()
 
 # Globaler Status
 class ServiceStatus:
@@ -32,10 +38,17 @@ class ServiceStatus:
         self.last_update = None
         self.logs = []
         self.max_logs = 100
+        self.cover_data = None  # Cover-Bilddaten
         
     def update_cd(self, cd_info):
         self.current_cd = cd_info
         self.last_update = datetime.now()
+        
+    def update_cover(self, cover_data: bytes):
+        """Speichert Cover-Bilddaten"""
+        self.cover_data = cover_data
+        if self.current_cd:
+            self.current_cd['cover_url'] = '/api/cover'
         
     def update_progress(self, step, progress, current_track=None, total_tracks=None):
         self.current_step = step
@@ -63,6 +76,7 @@ class ServiceStatus:
         self.progress = 0
         self.current_track = 0
         self.total_tracks = 0
+        self.cover_data = None
         self.last_update = datetime.now()
 
 status = ServiceStatus()
@@ -78,17 +92,26 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/settings')
+def settings():
+    """Einstellungsseite"""
+    return render_template('settings.html')
+
+
 @app.route('/api/status')
 def get_status():
     """API: Aktueller Service-Status"""
+    status_data = shared_status.get_status()
+    
+    # Kompatibilität mit Frontend herstellen
     return jsonify({
-        'current_cd': status.current_cd,
-        'processing': status.processing,
-        'current_step': status.current_step,
-        'progress': status.progress,
-        'current_track': status.current_track,
-        'total_tracks': status.total_tracks,
-        'last_update': status.last_update.isoformat() if status.last_update else None
+        'current_cd': status_data.get('current_cd'),
+        'processing': status_data.get('processing', False),
+        'current_step': status_data.get('current_step'),
+        'progress': status_data.get('progress', 0),
+        'current_track': status_data.get('current_track', 0),
+        'total_tracks': status_data.get('total_tracks', 0),
+        'last_update': status_data.get('last_update')
     })
 
 
@@ -150,13 +173,17 @@ def get_config():
 
 
 @app.route('/api/config', methods=['POST'])
-def update_config():
-    """API: Konfiguration aktualisieren"""
+def save_config():
+    """API: Konfiguration speichern"""
     try:
         new_config = request.json
         
+        # Validierung (basic)
+        if not new_config:
+            return jsonify({'error': 'Keine Konfiguration übergeben'}), 400
+        
         # Backup erstellen
-        backup_path = CONFIG_PATH.with_suffix('.yaml.backup')
+        backup_path = CONFIG_PATH.parent / f"config.backup.{int(time.time())}.yaml"
         with open(CONFIG_PATH, 'r') as f:
             backup_content = f.read()
         with open(backup_path, 'w') as f:
@@ -167,7 +194,11 @@ def update_config():
             yaml.dump(new_config, f, default_flow_style=False, allow_unicode=True)
         
         status.add_log('INFO', 'Konfiguration aktualisiert')
-        return jsonify({'success': True, 'message': 'Konfiguration gespeichert'})
+        return jsonify({
+            'success': True, 
+            'message': 'Konfiguration gespeichert. Service-Neustart erforderlich!',
+            'backup': str(backup_path)
+        })
     except Exception as e:
         status.add_log('ERROR', f'Fehler beim Speichern der Konfiguration: {e}')
         return jsonify({'error': str(e)}), 500
@@ -187,6 +218,46 @@ def eject_cd():
             return jsonify({'success': True})
         else:
             return jsonify({'error': 'CD konnte nicht ausgeworfen werden'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/cover')
+def get_cover():
+    """API: Aktuelles CD-Cover als Bilddatei"""
+    status_data = shared_status.get_status()
+    
+    if not status_data.get('current_cd') or not status_data['current_cd'].get('cover_path'):
+        return jsonify({'error': 'Kein Cover verfügbar'}), 404
+    
+    cover_path = status_data['current_cd']['cover_path']
+    
+    try:
+        return send_file(
+            cover_path,
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name='cover.jpg'
+        )
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
+
+
+@app.route('/api/restart', methods=['POST'])
+def restart_service():
+    """API: Service neu starten"""
+    try:
+        import subprocess
+        result = subprocess.run(
+            ['systemctl', 'restart', 'cd-ripper'],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode == 0:
+            return jsonify({'success': True, 'message': 'Service wird neu gestartet...'})
+        else:
+            return jsonify({'error': result.stderr}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

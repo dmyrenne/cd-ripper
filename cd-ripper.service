@@ -1,0 +1,30 @@
+[Unit]
+Description=CD-Ripper Automatic Service
+Documentation=https://github.com/dmyrenne/cd-ripper
+After=network.target sound.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/projects/cd-ripper
+ExecStart=/usr/bin/python3 /root/projects/cd-ripper/src/service.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Umgebungsvariablen
+Environment="PYTHONUNBUFFERED=1"
+
+# Graceful Shutdown
+TimeoutStopSec=30
+KillMode=mixed
+KillSignal=SIGTERM
+
+# Security (optional, für Production)
+# ProtectSystem=strict
+# ReadWritePaths=/root/projects/cd-ripper/logs /root/projects/cd-ripper/output /tmp
+# NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

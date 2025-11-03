@@ -45,7 +45,8 @@ async function ejectCD() {
 function updateStatus(data) {
     const albumTitle = document.getElementById('albumTitle');
     const albumArtist = document.getElementById('albumArtist');
-    const coverImg = document.querySelector('.cd-cover-container img');
+    const coverPlaceholder = document.getElementById('coverPlaceholder');
+    const coverImage = document.getElementById('coverImage');
     const progressSection = document.getElementById('progressSection');
     const warningBanner = document.getElementById('warningBanner');
     
@@ -57,11 +58,16 @@ function updateStatus(data) {
         
         albumTitle.textContent = cdName;
         albumArtist.textContent = artist;
+        albumArtist.style.color = '';
         
         // Album Cover aktualisieren
-        if (coverUrl && coverImg) {
-            coverImg.src = coverUrl;
-            coverImg.style.display = 'block';
+        if (coverUrl) {
+            coverImage.src = coverUrl;
+            coverImage.style.display = 'block';
+            coverPlaceholder.style.display = 'none';
+        } else {
+            coverImage.style.display = 'none';
+            coverPlaceholder.style.display = 'flex';
         }
         
         // Warnung anzeigen
@@ -91,9 +97,13 @@ function updateStatus(data) {
         albumArtist.textContent = artist;
         albumArtist.style.color = 'var(--success-color)';
         
-        if (coverUrl && coverImg) {
-            coverImg.src = coverUrl;
-            coverImg.style.display = 'block';
+        if (coverUrl) {
+            coverImage.src = coverUrl;
+            coverImage.style.display = 'block';
+            coverPlaceholder.style.display = 'none';
+        } else {
+            coverImage.style.display = 'none';
+            coverPlaceholder.style.display = 'flex';
         }
         
         warningBanner.style.display = 'none';
@@ -104,9 +114,8 @@ function updateStatus(data) {
         albumTitle.textContent = 'Keine CD eingelegt';
         albumArtist.textContent = '';
         
-        if (coverImg) {
-            coverImg.style.display = 'none';
-        }
+        coverImage.style.display = 'none';
+        coverPlaceholder.style.display = 'flex';
         
         warningBanner.style.display = 'none';
         progressSection.style.display = 'none';
@@ -188,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buttons
     document.getElementById('ejectBtn').addEventListener('click', ejectCD);
     document.getElementById('configBtn').addEventListener('click', () => {
-        window.location.href = '/config'; // Placeholder
+        window.location.href = '/settings';
     });
     
     // Log Toggle
