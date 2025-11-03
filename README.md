@@ -2,11 +2,15 @@
 
 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)## 📋 Projekt-Ziel
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)Ein vollautomatischer CD-Ripping-Service, der beim Einlegen einer Audio-CD:
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)1. Die CD identifiziert
+[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)
+
+## 📋 Projekt-Ziel
+Ein vollautomatischer CD-Ripping-Service, der beim Einlegen einer Audio-CD:
+1. Die CD identifiziert
 
 2. Unterscheide zwischen Kategorien: 
 
