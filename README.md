@@ -1,46 +1,89 @@
-# 🎵 CD-Ripper# 🎵 CD-Ripper - Automatic CD Ripping Service
+# CD-Ripper# 🎵 CD-Ripper# 🎵 CD-Ripper - Automatic CD Ripping Service
 
 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-
-[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+Automatic CD ripping service that detects audio CDs, identifies them via MusicBrainz, rips to MP3/FLAC, and syncs to your server.
 
 
 
-Automatic CD ripping service with intelligent categorization and web interface. Insert CD → Get tagged audio files on your server.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Installation[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 
----
+```bash[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-## ✨ Features[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+# Clone repository
 
-## Features
+git clone https://github.com/dmyrenne/cd-ripper.git[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
+cd cd-ripper
 
 
+
+# Install system dependencies
+
+sudo apt-get updateAutomatic CD ripping service with intelligent categorization and web interface. Insert CD → Get tagged audio files on your server.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+sudo apt-get install -y cdparanoia flac lame ffmpeg libdiscid0 rsync sshpass eject python3-pip python3-venv
+
+
+
+# Setup Python environment
+
+python3 -m venv venv---
+
+source venv/bin/activate
+
+pip install -r requirements.txt## ✨ Features[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
+
+
+# Configure## Features
+
+cp config/config.yaml.example config/config.yaml
+
+nano config/config.yaml
+
+# Edit: device (/dev/sr0), server host, user, password, remote paths
 
 ### 🎯 Automatic Workflow
 
-- **CD Detection** - Automatically recognizes audio CDs### 🎯 Core FunctionsAutomatic service for audio CDs with intelligent categorization, format-specific conversion, and web interface for monitoring and configuration.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)
+# Install and start service
+
+sudo ./install-service.sh- **CD Detection** - Automatically recognizes audio CDs### 🎯 Core FunctionsAutomatic service for audio CDs with intelligent categorization, format-specific conversion, and web interface for monitoring and configuration.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)
+
+```
 
 - **Identification** - Fetches metadata from MusicBrainz
 
+## Usage
+
 - **Categorization** - Kids content, audiobooks, or music- **Automatic CD Detection**: Automatically recognizes inserted audio CDs
+
+Web interface: `http://<raspberry-pi-ip>:5000`
 
 - **Format Selection** - MP3 320kbps or FLAC lossless
 
-- **Server Sync** - Automatic upload via rsync- **MusicBrainz Integration**: Identifies CDs and downloads metadata + cover art
+Service commands:
 
-- **Auto-Eject** - Done and ready for next CD
+```bash- **Server Sync** - Automatic upload via rsync- **MusicBrainz Integration**: Identifies CDs and downloads metadata + cover art
 
-- **Intelligent Categorization**: 
+sudo systemctl status cd-ripper
 
-### 🌐 Web Interface
+sudo systemctl restart cd-ripper- **Auto-Eject** - Done and ready for next CD
 
-- Real-time status with album cover  - Category 1: Children's content (audio plays, children's music)![CD-Ripper Web Interface - Active Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)## 📋 Projekt-Ziel
+sudo journalctl -u cd-ripper -f
+
+```- **Intelligent Categorization**: 
+
+
+
+## License### 🌐 Web Interface
+
+
+
+MIT- Real-time status with album cover  - Category 1: Children's content (audio plays, children's music)![CD-Ripper Web Interface - Active Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)## 📋 Projekt-Ziel
+
 
 - Progress tracking per track
 
