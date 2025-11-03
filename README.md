@@ -1,6 +1,4 @@
-# 🎵 CD-Ripper - Automatic CD Ripping Service# 🎵 CD-Ripper - Automatic CD Ripping Service# 🎵 CD-Ripper - Automatischer CD-Ripping-Service# 🎵 Automatischer CD-Ripper - Projektübersicht
-
-
+# 🎵 CD-Ripper - Automatic CD Ripping Service
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -10,11 +8,7 @@
 
 
 
-Automatic service for audio CDs with intelligent categorization, format-specific conversion, and web interface for monitoring and configuration.[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-
-
-
-![CD-Ripper Web Interface - Active Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Automatic service for audio CDs [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
 
 
