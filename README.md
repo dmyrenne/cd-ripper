@@ -1,4 +1,4 @@
-# 🎵 CD-Ripper# 🎵 CD-Ripper - Automatic CD Ripping Service
+# 🎵 CD-Ripper - Automatic CD Ripping Service
 
 
 
