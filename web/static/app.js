@@ -4,6 +4,28 @@ let currentConfig = null;
 let autoScroll = true;
 let logsExpanded = false;
 
+// Initialize i18n on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load language from config
+    try {
+        const response = await fetch('/api/config');
+        const config = await response.json();
+        const lang = config?.web_interface?.language || 'en';
+        initLanguage();
+        setLanguage(lang);
+    } catch (error) {
+        console.error('Error loading config:', error);
+        initLanguage();
+        setLanguage('en'); // fallback
+    }
+    
+    // Start status polling
+    fetchStatus();
+    fetchLogs();
+    setInterval(fetchStatus, 2000);
+    setInterval(fetchLogs, 3000);
+});
+
 // API Calls
 async function fetchStatus() {
     try {
@@ -11,7 +33,7 @@ async function fetchStatus() {
         const data = await response.json();
         updateStatus(data);
     } catch (error) {
-        console.error('Fehler beim Laden des Status:', error);
+        console.error('Error loading status:', error);
     }
 }
 
@@ -21,23 +43,23 @@ async function fetchLogs() {
         const data = await response.json();
         updateLogs(data.logs);
     } catch (error) {
-        console.error('Fehler beim Laden der Logs:', error);
+        console.error('Error loading logs:', error);
     }
 }
 
 async function ejectCD() {
-    if (!confirm('CD wirklich auswerfen?')) return;
+    if (!confirm(t('msg_eject_confirm') || 'Really eject CD?')) return;
     
     try {
         const response = await fetch('/api/eject', { method: 'POST' });
         if (response.ok) {
-            alert('CD wird ausgeworfen...');
+            alert(t('msg_eject_success'));
         } else {
-            alert('Fehler beim Auswerfen der CD');
+            alert(t('msg_eject_error'));
         }
     } catch (error) {
-        console.error('Fehler:', error);
-        alert('Fehler beim Auswerfen der CD');
+        console.error('Error:', error);
+        alert(t('msg_eject_error'));
     }
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +10,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/i18n.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎵 CD-Ripper</h1>
+            <h1 data-i18n="app_title">🎵 CD-Ripper</h1>
             <div class="header-actions">
-                <button id="ejectBtn" class="btn btn-primary">⏏️<span class="btn-text"> Auswerfen</span></button>
-                <button id="configBtn" class="btn btn-primary">⚙️<span class="btn-text"> Einstellungen</span></button>
+                <button id="ejectBtn" class="btn btn-primary">⏏️<span class="btn-text" data-i18n="btn_eject"> Eject</span></button>
+                <button id="configBtn" class="btn btn-primary">⚙️<span class="btn-text" data-i18n="btn_settings"> Settings</span></button>
             </div>
         </header>
 
@@ -33,20 +34,20 @@
 
             <!-- Album Info -->
             <div class="album-info" id="albumInfo">
-                <h2 id="albumTitle">Keine CD eingelegt</h2>
+                <h2 id="albumTitle" data-i18n="no_cd">No CD inserted</h2>
                 <p id="albumArtist"></p>
             </div>
 
             <!-- Warnung während Ripping -->
             <div class="warning-banner" id="warningBanner" style="display: none;">
                 <span class="warning-icon">⚠️</span>
-                <strong>CD nicht entfernen!</strong> Ripping läuft...
+                <span data-i18n="warning_banner" data-i18n-html="true"><strong>Do not remove CD!</strong> Ripping in progress...</span>
             </div>
 
             <!-- Progress Bar -->
             <div class="progress-section" id="progressSection" style="display: none;">
                 <div class="progress-info">
-                    <div class="step-name" id="stepName">Warte...</div>
+                    <div class="step-name" id="stepName" data-i18n="waiting">Waiting...</div>
                     <div class="track-info" id="trackInfo"></div>
                 </div>
                 <div class="progress-bar">

@@ -54,6 +54,11 @@ function populateForm(config) {
     document.getElementById('cleanup').checked = sync.cleanup !== false;
     document.getElementById('auto_eject').checked = sync.auto_eject !== false;
     
+    // Web Interface
+    const web = config.web_interface || {};
+    document.getElementById('web_port').value = web.port || 5000;
+    document.getElementById('web_language').value = web.language || 'en';
+    
     // Logging
     const logging = config.logging || {};
     document.getElementById('log_level').value = logging.level || 'INFO';
@@ -99,9 +104,11 @@ function buildConfigFromForm() {
             file: document.getElementById('log_file').value,
             format: currentConfig?.logging?.format || '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         },
-        web_interface: currentConfig?.web_interface || {
-            host: '0.0.0.0',
-            port: 5000
+        web_interface: {
+            host: currentConfig?.web_interface?.host || '0.0.0.0',
+            port: parseInt(document.getElementById('web_port').value) || 5000,
+            debug: currentConfig?.web_interface?.debug || false,
+            language: document.getElementById('web_language').value
         }
     };
     

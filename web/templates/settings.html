@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CD-Ripper Einstellungen</title>
+    <title>CD-Ripper Settings</title>
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/i18n.js"></script>
     <style>
         .settings-container {
             max-width: 900px;
@@ -283,6 +284,26 @@
                         <input type="checkbox" id="auto_eject">
                         <span>CD nach Sync automatisch auswerfen</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Web Interface Settings -->
+        <div class="settings-section">
+            <h2>🌐 Web-Interface</h2>
+            <div class="form-row">
+                <div class="form-field">
+                    <label for="web_port">Port</label>
+                    <input type="number" id="web_port" placeholder="5000">
+                    <small>Port für das Web-Interface</small>
+                </div>
+                <div class="form-field">
+                    <label for="web_language">Sprache / Language</label>
+                    <select id="web_language">
+                        <option value="en">English</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                    <small>Interface language</small>
                 </div>
             </div>
         </div>

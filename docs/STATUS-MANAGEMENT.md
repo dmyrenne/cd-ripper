@@ -1,19 +1,19 @@
-# CD-Ripper Status-Management
+# CD-Ripper Status Management
 
-## Status-Verhalten
+## Status Behavior
 
-### Automatische Status-Updates
+### Automatic Status Updates
 
-Der Service aktualisiert den Status automatisch:
+The service updates the status automatically:
 
-1. **CD eingelegt** → Status zeigt CD-Info + Cover
-2. **Ripping läuft** → Progress-Updates in Echtzeit
-3. **CD entfernt** → Status wird automatisch gelöscht
+1. **CD inserted** → Status shows CD info + cover
+2. **Ripping running** → Real-time progress updates
+3. **CD removed** → Status is automatically cleared
 
-### Status-Zustände
+### Status States
 
 ```javascript
-// Keine CD eingelegt
+// No CD inserted
 {
   "current_cd": null,
   "processing": false,
@@ -21,17 +21,17 @@ Der Service aktualisiert den Status automatisch:
   "progress": 0
 }
 
-// CD erkannt, wartet auf Verarbeitung
+// CD detected, waiting for processing
 {
   "current_cd": {
     "name": "Album Name",
-    "artist": "Künstler",
+    "artist": "Artist Name",
     "cover_url": "/api/cover"
   },
   "processing": false
 }
 
-// Verarbeitung läuft
+// Processing in progress
 {
   "current_cd": {...},
   "processing": true,
@@ -42,52 +42,52 @@ Der Service aktualisiert den Status automatisch:
 }
 ```
 
-### Web-Interface Verhalten
+### Web Interface Behavior
 
-Das Web-Interface (http://localhost:5000) aktualisiert sich **alle 2 Sekunden** automatisch:
+The web interface (http://localhost:5000) updates automatically **every 2 seconds**:
 
-- **Keine CD**: Zeigt "Keine CD eingelegt" + Placeholder
-- **CD eingelegt**: Zeigt Album + Artist + Cover
-- **Ripping läuft**: Zeigt zusätzlich Progress-Bar + Warnung
-- **CD entfernt**: Wechselt sofort zu "Keine CD eingelegt"
+- **No CD**: Shows "No CD inserted" + Placeholder
+- **CD inserted**: Shows Album + Artist + Cover
+- **Ripping active**: Additionally shows progress bar + warning
+- **CD removed**: Immediately switches to "No CD inserted"
 
-### Manuelles Status-Management
+### Manual Status Management
 
 ```bash
-# Status anzeigen
+# Display status
 cat /tmp/cd-ripper-status.json | python3 -m json.tool
 
-# Status manuell löschen (falls nötig)
+# Manually clear status (if needed)
 python3 -c "from src.shared_status import SharedStatus; SharedStatus().clear()"
 
-# Cover anzeigen
+# Display cover
 ls -lh /tmp/current-cover.jpg
 ```
 
 ### Debugging
 
 ```bash
-# Service-Logs live anschauen
+# Watch service logs live
 sudo journalctl -u cd-ripper -f
 
-# Letzte 50 Zeilen
+# Last 50 lines
 sudo journalctl -u cd-ripper -n 50
 
-# Ripper-Log anschauen
+# Watch ripper log
 tail -f /root/projects/cd-ripper/logs/ripper.log
 ```
 
-### Status-Datei
+### Status File
 
-- **Pfad**: `/tmp/cd-ripper-status.json`
+- **Path**: `/tmp/cd-ripper-status.json`
 - **Locking**: fcntl (thread-safe)
-- **Cover**: `/tmp/current-cover.jpg` (wird bei neuer CD überschrieben)
-- **Persistenz**: Im RAM (/tmp), geht bei Reboot verloren (gewollt)
+- **Cover**: `/tmp/current-cover.jpg` (overwritten on new CD)
+- **Persistence**: In RAM (/tmp), cleared on reboot (intentional)
 
-### Automatisches Cleanup
+### Automatic Cleanup
 
-Der Service räumt automatisch auf:
+The service cleans up automatically:
 
-1. **CD entfernt** → Status wird gelöscht (current_cd = null)
-2. **Reboot** → /tmp wird geleert, Service startet fresh
-3. **Service-Neustart** → Alter Status bleibt erhalten (nützlich für Debugging)
+1. **CD removed** → Status is cleared (current_cd = null)
+2. **Reboot** → /tmp is cleared, service starts fresh
+3. **Service restart** → Old status remains (useful for debugging)
