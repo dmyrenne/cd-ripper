@@ -1,0 +1,65 @@
+# CD-Ripper Konfiguration (Beispiel)
+# Kopiere diese Datei zu config.yaml und passe die Werte an
+
+ripper:
+  quality: "paranoia"             # paranoia, fast, normal
+  device: "/dev/sr0"            # CD-ROM Device
+  
+  # Profile pro Kategorie
+  profiles:
+    category_1:                 # Kinderinhalte
+      format: "mp3"
+      bitrate: 320              # kbps
+      sample_rate: 44100
+      channels: 2
+    category_2:                 # Hörbücher
+      format: "mp3"
+      bitrate: 320              # kbps
+      sample_rate: 44100
+      channels: 2
+    category_3:                 # Musik
+      format: "flac"
+      compression: 8            # 0-8
+      # Lossless: Behält Original Sample-Rate & Bit-Tiefe
+
+identification:
+  musicbrainz_enabled: true
+  cddb_fallback: true
+  cover_art: true
+  cover_size: 1000              # pixels
+  user_agent: "CD-Ripper/1.0"   # MusicBrainz User-Agent
+  
+output:
+  local_path: "/mnt/dietpi_userdata/rips"
+  organize_by: "artist/album"   # artist/album, album, flat
+  filename_pattern: "{track:02d} - {title}"
+  
+sync:
+  enabled: true
+  server: "YOUR_SERVER_IP"      # z.B. 10.10.1.3
+  user: "YOUR_SSH_USER"         # z.B. dietpi
+  password: ""                  # SSH-Passwort (leer lassen für Key-based Auth empfohlen!)
+  
+  # Kategoriebasierte Remote-Pfade
+  remote_paths:
+    category_1: "/path/to/Kids"
+    category_2: "/path/to/Audiobooks"
+    category_3: "/path/to/Music"
+  
+  method: "rsync"               # rsync, scp
+  rsync_options: "-avz --progress"
+  auto_eject: true              # CD nach Sync auswerfen
+  cleanup_temp: true            # Temp-Dateien nach Sync löschen
+  
+logging:
+  level: "INFO"                 # DEBUG, INFO, WARNING, ERROR
+  file: "logs/ripper.log"       # Relativer Pfad vom Projekt-Root
+  max_bytes: 10485760           # 10MB
+  backup_count: 5
+  console_output: true
+
+web_interface:
+  enabled: true
+  host: "0.0.0.0"
+  port: 5000
+  debug: false

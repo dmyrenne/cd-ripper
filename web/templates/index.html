@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CD-Ripper Status</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 CD-Ripper</h1>
+            <div class="header-actions">
+                <button id="ejectBtn" class="btn btn-warning">⏏️ Auswerfen</button>
+                <button id="configBtn" class="btn btn-primary">⚙️ Einstellungen</button>
+            </div>
+        </header>
+
+        <!-- Haupt-Statusbereich - mittig -->
+        <section class="main-status">
+            <!-- Album Cover - mittig -->
+            <div class="cd-cover-container" id="cdCoverContainer">
+                <div class="cd-cover-placeholder">
+                    <span class="cd-icon">💿</span>
+                </div>
+            </div>
+
+            <!-- Album Info -->
+            <div class="album-info" id="albumInfo">
+                <h2 id="albumTitle">Keine CD eingelegt</h2>
+                <p id="albumArtist"></p>
+            </div>
+
+            <!-- Warnung während Ripping -->
+            <div class="warning-banner" id="warningBanner" style="display: none;">
+                <span class="warning-icon">⚠️</span>
+                <strong>CD nicht entfernen!</strong> Ripping läuft...
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-info">
+                    <div class="step-name" id="stepName">Warte...</div>
+                    <div class="track-info" id="trackInfo"></div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Log-Bereich - kollapsierbar -->
+        <section class="log-section">
+            <div class="log-header" id="logHeader">
+                <h3>📋 Log-Ausgabe</h3>
+                <button id="toggleLogs" class="btn-toggle">▼</button>
+            </div>
+            <div class="log-content collapsed" id="logContent">
+                <div class="log-controls">
+                    <label>
+                        <input type="checkbox" id="autoScroll" checked> Auto-Scroll
+                    </label>
+                    <button id="clearLogs" class="btn btn-sm">Löschen</button>
+                </div>
+                <div class="log-container" id="logContainer">
+                    <div class="log-placeholder">Lade Logs...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Konfigurations-Modal -->
+        <div id="configModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⚙️ Konfiguration</h2>
+                    <button class="modal-close" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="profiles">Ripping-Profile</button>
+                        <button class="tab-btn" data-tab="paths">Zielpfade</button>
+                        <button class="tab-btn" data-tab="sync">Sync-Einstellungen</button>
+                    </div>
+
+                    <div class="tab-content active" id="tab-profiles">
+                        <h3>Format-Profile nach Kategorie</h3>
+                        <div class="config-section">
+                            <h4>Kategorie 1 & 2 (Kinderinhalte / Hörbücher)</h4>
+                            <div class="form-group">
+                                <label>Format:</label>
+                                <select id="profile12_format">
+                                    <option value="mp3">MP3</option>
+                                    <option value="flac">FLAC</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Bitrate (MP3):</label>
+                                <input type="number" id="profile12_bitrate" value="192" step="32" min="128" max="320">
+                                <span class="unit">kbps</span>
+                            </div>
+                        </div>
+                        <div class="config-section">
+                            <h4>Kategorie 3 (Musik)</h4>
+                            <div class="form-group">
+                                <label>Format:</label>
+                                <select id="profile3_format">
+                                    <option value="mp3">MP3</option>
+                                    <option value="flac">FLAC</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>FLAC Compression:</label>
+                                <input type="number" id="profile3_compression" value="8" min="0" max="8">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-paths">
+                        <h3>Remote-Zielpfade</h3>
+                        <div class="form-group">
+                            <label>Kategorie 1 (Kinderinhalte):</label>
+                            <input type="text" id="path_category_1" class="full-width">
+                        </div>
+                        <div class="form-group">
+                            <label>Kategorie 2 (Hörbücher):</label>
+                            <input type="text" id="path_category_2" class="full-width">
+                        </div>
+                        <div class="form-group">
+                            <label>Kategorie 3 (Musik):</label>
+                            <input type="text" id="path_category_3" class="full-width">
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-sync">
+                        <h3>Server-Synchronisation</h3>
+                        <div class="form-group">
+                            <label>Server:</label>
+                            <input type="text" id="sync_server" placeholder="10.10.1.3">
+                        </div>
+                        <div class="form-group">
+                            <label>Benutzer:</label>
+                            <input type="text" id="sync_user" placeholder="dietpi">
+                        </div>
+                        <div class="form-group">
+                            <label>Passwort:</label>
+                            <input type="password" id="sync_password">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="sync_enabled"> Sync aktiviert
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="sync_auto_eject"> CD nach Sync auswerfen
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="sync_cleanup"> Lokale Dateien nach Sync löschen
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveConfig" class="btn btn-primary">💾 Speichern</button>
+                    <button id="cancelConfig" class="btn btn-secondary">Abbrechen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

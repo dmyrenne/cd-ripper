@@ -1,0 +1,22 @@
+# CD-Ripper Python Dependencies
+
+# CD Identifikation & Metadaten
+discid>=1.2.0
+musicbrainzngs>=0.7.1
+# requests - via apt: python3-requests
+
+# Audio Tagging
+mutagen>=1.47.0
+
+# Hardware Detection
+pyudev>=0.24.1
+
+# Web Interface
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Logging & Config
+# pyyaml - via apt: python3-yaml
+
+# Image Processing (für Cover-Art)
+# pillow - via apt: python3-pil
