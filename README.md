@@ -1,266 +1,519 @@
-# 🎵 CD-Ripper - Automatic CD Ripping Service
+# 🎵 CD-Ripper# 🎵 CD-Ripper - Automatic CD Ripping Service
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
 
 
-Automatic service for audio CDs [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+Automatic CD ripping service with intelligent categorization and web interface. Insert CD → Get tagged audio files on your server.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
+
+---
 
 ## ✨ Features[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
+## Features
 
 
-### 🎯 Core FunctionsAutomatic service for audio CDs with intelligent categorization, format-specific conversion, and web interface for monitoring and configuration.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)
 
-- **Automatic CD Detection**: Automatically recognizes inserted audio CDs
+### 🎯 Automatic Workflow
 
-- **MusicBrainz Integration**: Identifies CDs and downloads metadata + cover art
+- **CD Detection** - Automatically recognizes audio CDs### 🎯 Core FunctionsAutomatic service for audio CDs with intelligent categorization, format-specific conversion, and web interface for monitoring and configuration.[![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-4-red.svg)](https://www.raspberrypi.org/)
+
+- **Identification** - Fetches metadata from MusicBrainz
+
+- **Categorization** - Kids content, audiobooks, or music- **Automatic CD Detection**: Automatically recognizes inserted audio CDs
+
+- **Format Selection** - MP3 320kbps or FLAC lossless
+
+- **Server Sync** - Automatic upload via rsync- **MusicBrainz Integration**: Identifies CDs and downloads metadata + cover art
+
+- **Auto-Eject** - Done and ready for next CD
 
 - **Intelligent Categorization**: 
 
-  - Category 1: Children's content (audio plays, children's music)![CD-Ripper Web Interface - Active Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)## 📋 Projekt-Ziel
+### 🌐 Web Interface
 
-  - Category 2: Audiobooks for adults
+- Real-time status with album cover  - Category 1: Children's content (audio plays, children's music)![CD-Ripper Web Interface - Active Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)## 📋 Projekt-Ziel
 
-  - Category 3: MusicEin vollautomatischer CD-Ripping-Service, der beim Einlegen einer Audio-CD:
+- Progress tracking per track
+
+- Settings editor (all parameters)  - Category 2: Audiobooks for adults
+
+- Mobile-responsive design
+
+- Multilingual (English/German)  - Category 3: MusicEin vollautomatischer CD-Ripping-Service, der beim Einlegen einer Audio-CD:
+
+- Live logs
 
 - **Format Optimization**:
 
-  - Categories 1+2: MP3 @ 320 kbit/s (space-saving)## ✨ Features1. Die CD identifiziert
+### ⚙️ Technical
 
-  - Category 3: FLAC Lossless (maximum quality)
+- Systemd service with auto-start  - Categories 1+2: MP3 @ 320 kbit/s (space-saving)## ✨ Features1. Die CD identifiziert
+
+- YAML configuration
+
+- Robust error handling  - Category 3: FLAC Lossless (maximum quality)
+
+- Thread-safe status management
 
 - **Server Synchronization**: Automatic upload to NAS/Server via rsync
 
+---
+
 - **Auto-Cleanup**: Local files are deleted after upload
+
+## Quick Start
 
 ### 🎯 Core Functions2. Unterscheide zwischen Kategorien: 
 
-### 🌐 Web Interface
-
-- **Real-time Status**: Live display of ripping progress- **Automatic CD Detection**: Automatically recognizes inserted audio CDs
-
-- **Cover Display**: Shows album cover during ripping
-
-- **Progress Tracking**: Detailed progress display per track- **MusicBrainz Integration**: Identifies CDs and downloads metadata + cover artAutomatischer Service für Audio-CDs mit intelligenter Kategorisierung, formatspezifischer Konvertierung und Web-Interface zur Überwachung und Konfiguration.    Kategorie 1: Hörspiel oder Musik für Kinder
-
-- **Settings Editor**: All parameters adjustable via web UI
-
-- **Mobile-Optimized**: Responsive design for smartphone/tablet- **Intelligent Categorization**: 
-
-- **Live Logs**: Real-time log display in browser
-
-- **Multilingual**: English & German interface (configurable)  - Category 1: Children's content (audio plays, children's music)    Kategorie 2: Hörbücher eher für Erwachsene
-
-
-
-### 🔧 Technical Features  - Category 2: Audiobooks for adults
-
-- **Systemd Service**: Automatic start on boot
-
-- **Fault Tolerance**: Retry logic and robust error handling  - Category 3: Music![CD-Ripper Web Interface - Aktives Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)    Kategorie 3: Musik (Künstler, Album, Tracks)
-
-- **Status Persistence**: SharedStatus via JSON file with fcntl locking
-
-- **Configurable**: YAML-based configuration- **Format Optimization**:
-
-- **Complete Logging**: Audit trail of all operations
-
-- **Internationalization**: Easy to add more languages  - Categories 1+2: MP3 @ 320 kbit/s (space-saving)2. Entsprechend der Kategorie unterschiedliche Ripping Einstellungen wählen:
-
-
-
-## 📋 Requirements  - Category 3: FLAC Lossless (maximum quality)
-
-
-
-### Hardware- **Server Synchronization**: Automatic upload to NAS/Server via rsync## ✨ Features    Kategorie 1 + 2: MP3 320KBit/s
-
-- **Raspberry Pi 4** (or similar, min. 2GB RAM recommended)
-
-- **USB CD/DVD Drive**- **Auto-Cleanup**: Local files are deleted after upload
-
-- **Network Access** for MusicBrainz and server sync
-
-    Kategorie 3: FLAC (16 Bit 44,000Hz)
-
-### Software
-
-- **Raspberry Pi OS** (Debian Bookworm or newer)### 🌐 Web Interface
-
-- **Python 3.8+**
-
-- **Root Access** (for systemd service)- **Real-time Status**: Live display of ripping progress### 🎯 Kern-Funktionen3. In das gewünschte Format konvertiert (FLAC, MP3)
-
-
-
-## 🚀 Installation- **Cover Display**: Shows album cover during ripping
-
-
-
-### 1. Clone Repository- **Progress Tracking**: Detailed progress display per track- **Automatische CD-Erkennung**: Erkennt eingelegte Audio-CDs automatisch4. Metadaten und Cover einbettet
-
-
-
-```bash- **Settings Editor**: All parameters adjustable via web UI
-
-cd ~
-
-git clone https://github.com/dmyrenne/cd-ripper.git- **Mobile-Optimized**: Responsive design for smartphone/tablet- **MusicBrainz Integration**: Identifiziert CDs und lädt Metadaten + Cover-Art5. Automatisch auf einen lokalen Server synchronisiert
-
-cd cd-ripper
-
-```- **Live Logs**: Real-time log display in browser
-
-
-
-### 2. Install System Dependencies- **Intelligente Kategorisierung**: 
-
-
-
-```bash### 🔧 Technical Features  - Kategorie 1: Kinderinhalte (Hörspiele, Kindermusik)
-
-sudo apt-get update
-
-sudo apt-get install -y \- **Systemd Service**: Automatic start on boot  - Kategorie 2: Hörbücher für Erwachsene
-
-    cdparanoia \
-
-    flac \- **Fault Tolerance**: Retry logic and robust error handling  - Kategorie 3: Musik
-
-    lame \
-
-    ffmpeg \- **Status Persistence**: SharedStatus via JSON file with fcntl locking- **Format-Optimierung**:
-
-    libdiscid0 \
-
-    rsync \- **Configurable**: YAML-based configuration  - Kategorien 1+2: MP3 @ 320 kbit/s (platzsparend)
-
-    sshpass \
-
-    eject \- **Complete Logging**: Audit trail of all operations  - Kategorie 3: FLAC Lossless (maximale Qualität)
-
-    python3-pip \
-
-    python3-venv- **Server-Synchronisation**: Automatischer Upload auf NAS/Server via rsync
-
-```
-
-## 📋 Requirements- **Auto-Cleanup**: Lokale Dateien werden nach Upload gelöscht
-
-### 3. Create Python Virtual Environment
-
-
-
 ```bash
 
-python3 -m venv venv### Hardware### 🌐 Web-Interface
+# 1. Clone### 🌐 Web Interface
+
+git clone https://github.com/dmyrenne/cd-ripper.git
+
+cd cd-ripper- **Real-time Status**: Live display of ripping progress- **Automatic CD Detection**: Automatically recognizes inserted audio CDs
+
+
+
+# 2. Install dependencies- **Cover Display**: Shows album cover during ripping
+
+sudo apt-get install -y cdparanoia flac lame ffmpeg libdiscid0 rsync sshpass eject python3-pip python3-venv
+
+python3 -m venv venv- **Progress Tracking**: Detailed progress display per track- **MusicBrainz Integration**: Identifies CDs and downloads metadata + cover artAutomatischer Service für Audio-CDs mit intelligenter Kategorisierung, formatspezifischer Konvertierung und Web-Interface zur Überwachung und Konfiguration.    Kategorie 1: Hörspiel oder Musik für Kinder
 
 source venv/bin/activate
 
-pip install -r requirements.txt- **Raspberry Pi 4** (or similar, min. 2GB RAM recommended)- **Echtzeit-Status**: Live-Anzeige des Ripping-Fortschritts
+pip install -r requirements.txt- **Settings Editor**: All parameters adjustable via web UI
+
+
+
+# 3. Configure- **Mobile-Optimized**: Responsive design for smartphone/tablet- **Intelligent Categorization**: 
+
+cp config/config.yaml.example config/config.yaml
+
+nano config/config.yaml  # Edit: CD drive, server, paths- **Live Logs**: Real-time log display in browser
+
+
+
+# 4. Install service- **Multilingual**: English & German interface (configurable)  - Category 1: Children's content (audio plays, children's music)    Kategorie 2: Hörbücher eher für Erwachsene
+
+sudo ./install-service.sh
+
+
+
+# 5. Open web interface
+
+# http://<raspberry-pi-ip>:5000### 🔧 Technical Features  - Category 2: Audiobooks for adults
+
+```
+
+- **Systemd Service**: Automatic start on boot
+
+---
+
+- **Fault Tolerance**: Retry logic and robust error handling  - Category 3: Music![CD-Ripper Web Interface - Aktives Ripping](https://via.placeholder.com/1200x600/1e293b/ffffff?text=CD-Ripper+Web+Interface)    Kategorie 3: Musik (Künstler, Album, Tracks)
+
+## Configuration
+
+- **Status Persistence**: SharedStatus via JSON file with fcntl locking
+
+### Minimal Setup
+
+- **Configurable**: YAML-based configuration- **Format Optimization**:
+
+Edit `config/config.yaml`:
+
+- **Complete Logging**: Audit trail of all operations
+
+```yaml
+
+ripper:- **Internationalization**: Easy to add more languages  - Categories 1+2: MP3 @ 320 kbit/s (space-saving)2. Entsprechend der Kategorie unterschiedliche Ripping Einstellungen wählen:
+
+  device: /dev/sr0              # Your CD drive
+
+
+
+sync:
+
+  host: 10.10.1.3               # Your NAS/Server## 📋 Requirements  - Category 3: FLAC Lossless (maximum quality)
+
+  user: your_username
+
+  password: your_password       # Or use SSH keys (recommended)
+
+  remote_paths:
+
+    category_1: /path/to/kids           # Children's content### Hardware- **Server Synchronization**: Automatic upload to NAS/Server via rsync## ✨ Features    Kategorie 1 + 2: MP3 320KBit/s
+
+    category_2: /path/to/audiobooks     # Audiobooks
+
+    category_3: /path/to/music          # Music- **Raspberry Pi 4** (or similar, min. 2GB RAM recommended)
+
+
+
+web_interface:- **USB CD/DVD Drive**- **Auto-Cleanup**: Local files are deleted after upload
+
+  port: 5000
+
+  language: en                  # en or de- **Network Access** for MusicBrainz and server sync
+
+```
+
+    Kategorie 3: FLAC (16 Bit 44,000Hz)
+
+### Encoding Profiles
+
+### Software
+
+```yaml
+
+encoder:- **Raspberry Pi OS** (Debian Bookworm or newer)### 🌐 Web Interface
+
+  profiles:
+
+    category_1_2:               # Kids + Audiobooks- **Python 3.8+**
+
+      format: mp3
+
+      bitrate: 320- **Root Access** (for systemd service)- **Real-time Status**: Live display of ripping progress### 🎯 Kern-Funktionen3. In das gewünschte Format konvertiert (FLAC, MP3)
+
+    category_3:                 # Music
+
+      format: flac
+
+      compression_level: 8
+
+```## 🚀 Installation- **Cover Display**: Shows album cover during ripping
+
+
+
+---
+
+
+
+## Usage### 1. Clone Repository- **Progress Tracking**: Detailed progress display per track- **Automatische CD-Erkennung**: Erkennt eingelegte Audio-CDs automatisch4. Metadaten und Cover einbettet
+
+
+
+### Automatic Mode
+
+1. Insert CD → Service detects automatically
+
+2. Watch progress in web interface```bash- **Settings Editor**: All parameters adjustable via web UI
+
+3. CD is ejected when done
+
+4. Files are on your servercd ~
+
+
+
+### Service Managementgit clone https://github.com/dmyrenne/cd-ripper.git- **Mobile-Optimized**: Responsive design for smartphone/tablet- **MusicBrainz Integration**: Identifiziert CDs und lädt Metadaten + Cover-Art5. Automatisch auf einen lokalen Server synchronisiert
+
+
+
+```bashcd cd-ripper
+
+sudo systemctl status cd-ripper    # Check status
+
+sudo systemctl restart cd-ripper   # Restart```- **Live Logs**: Real-time log display in browser
+
+sudo journalctl -u cd-ripper -f    # View logs
+
+```
+
+
+
+### Web Interface### 2. Install System Dependencies- **Intelligente Kategorisierung**: 
+
+
+
+Open `http://<ip>:5000`:
+
+- **Main page** - Status, progress, cover art
+
+- **Settings** - Edit all configuration```bash### 🔧 Technical Features  - Kategorie 1: Kinderinhalte (Hörspiele, Kindermusik)
+
+- **Logs** - Real-time log viewer
+
+sudo apt-get update
+
+---
+
+sudo apt-get install -y \- **Systemd Service**: Automatic start on boot  - Kategorie 2: Hörbücher für Erwachsene
+
+## Requirements
+
+    cdparanoia \
+
+**Hardware:**
+
+- Raspberry Pi 4 (2GB+ RAM)    flac \- **Fault Tolerance**: Retry logic and robust error handling  - Kategorie 3: Musik
+
+- USB CD/DVD drive
+
+- Network connection    lame \
+
+
+
+**Software:**    ffmpeg \- **Status Persistence**: SharedStatus via JSON file with fcntl locking- **Format-Optimierung**:
+
+- Raspberry Pi OS (Debian Bookworm+)
+
+- Python 3.8+    libdiscid0 \
+
+- Root access (for systemd)
+
+    rsync \- **Configurable**: YAML-based configuration  - Kategorien 1+2: MP3 @ 320 kbit/s (platzsparend)
+
+---
+
+    sshpass \
+
+## Troubleshooting
+
+    eject \- **Complete Logging**: Audit trail of all operations  - Kategorie 3: FLAC Lossless (maximale Qualität)
+
+### CD not detected
+
+```bash    python3-pip \
+
+lsblk | grep sr0              # Check if drive exists
+
+cdparanoia -vsQ               # Test drive    python3-venv- **Server-Synchronisation**: Automatischer Upload auf NAS/Server via rsync
+
+```
+
+```
+
+### Service won't start
+
+```bash## 📋 Requirements- **Auto-Cleanup**: Lokale Dateien werden nach Upload gelöscht
+
+sudo journalctl -u cd-ripper -n 50          # Check logs
+
+python3 -c "import yaml; yaml.safe_load(open('config/config.yaml'))"  # Validate config### 3. Create Python Virtual Environment
+
+```
+
+
+
+### Sync fails
+
+```bash```bash
+
+ssh user@host                 # Test SSH connection
+
+rsync -avz /tmp/test user@host:/path/  # Test rsyncpython3 -m venv venv### Hardware### 🌐 Web-Interface
+
+```
+
+source venv/bin/activate
+
+### Web interface not accessible
+
+```bashpip install -r requirements.txt- **Raspberry Pi 4** (or similar, min. 2GB RAM recommended)- **Echtzeit-Status**: Live-Anzeige des Ripping-Fortschritts
+
+sudo netstat -tlnp | grep 5000   # Check if port is listening
+
+curl http://localhost:5000        # Test locally```
 
 ```
 
 - **USB CD/DVD Drive**- **Cover-Anzeige**: Zeigt Album-Cover während des Rippings
 
+---
+
 ### 4. Create Configuration
+
+## Project Structure
 
 - **Network Access** for MusicBrainz and server sync- **Progress-Tracking**: Detaillierte Fortschrittsanzeige pro Track
 
+```
+
+cd-ripper/```bash
+
+├── src/                    # Python source code
+
+│   ├── main.py            # Main service loopcp config/config.yaml.example config/config.yaml- **Einstellungs-Editor**: Alle Parameter über Web-UI anpassbar
+
+│   ├── service.py         # Service launcher
+
+│   ├── cd_detector.py     # Hardware detectionnano config/config.yaml
+
+│   ├── cd_identifier.py   # MusicBrainz API
+
+│   ├── cd_categorizer.py  # Category logic```### Software- **Mobile-optimiert**: Responsive Design für Smartphone/Tablet
+
+│   ├── ripper.py          # cdparanoia wrapper
+
+│   ├── encoder.py         # Audio conversion
+
+│   ├── tagger.py          # Metadata tagging
+
+│   ├── syncer.py          # Server sync**Important Settings:**- **Raspberry Pi OS** (Debian Bookworm or newer)- **Live-Logs**: Echtzeit-Log-Anzeige im Browser
+
+│   └── web_interface.py   # Flask web app
+
+├── web/                    # Web interface
+
+│   ├── static/            # CSS, JS, i18n
+
+│   └── templates/         # HTML templates```yaml- **Python 3.8+**
+
+├── config/
+
+│   └── config.yaml.exampleripper:
+
+├── tests/                  # Test scripts
+
+├── docs/                   # Documentation  device: /dev/sr0  # Your CD drive- **Root Access** (for systemd service)### 🔧 Technische Features
+
+└── cd-ripper.service      # Systemd unit file
+
+```  
+
+
+
+---sync:- **Systemd-Service**: Automatischer Start beim Boot
+
+
+
+## Security  enabled: true
+
+
+
+**Use SSH keys instead of passwords:**  host: 10.10.1.3  # Your NAS/Server## 🚀 Installation- **Fehlertoleranz**: Retry-Logik und robustes Error-Handling
+
+
+
+```bash  user: your_username
+
+ssh-keygen -t ed25519
+
+ssh-copy-id user@server  password: your_password  # Better: Use SSH keys!- **Status-Persistence**: SharedStatus via JSON-File mit fcntl-Locking
+
+# Remove password from config.yaml
+
+```  remote_paths:
+
+
+
+**Restrict web interface access:**    category_1: /path/to/kids### 1. Clone Repository- **Konfigurierbar**: YAML-basierte Konfiguration
+
+
+
+```bash    category_2: /path/to/audiobooks
+
+sudo ufw allow from 192.168.1.0/24 to any port 5000
+
+```    category_3: /path/to/music- **Vollständiges Logging**: Audit-Trail aller Operationen
+
+
+
+---
+
+
+
+## Developmentoutput:```bash
+
+
+
+### Adding Languages  local_path: /mnt/dietpi_userdata/rips  # Local output
+
+
+
+Edit `web/static/i18n.js`:cd ~## 📋 Voraussetzungen
+
+
+
+```javascriptweb_interface:
+
+const translations = {
+
+    en: { /* English */ },  port: 5000git clone https://github.com/dmyrenne/cd-ripper.git
+
+    de: { /* German */ },
+
+    fr: { /* Add French */ }  language: en  # en (English) or de (Deutsch)
+
+};
+
+``````cd cd-ripper### Hardware
+
+
+
+See [docs/INTERNATIONALIZATION.md](docs/INTERNATIONALIZATION.md) for details.
+
+
+
+### Running Tests### 5. Install Service```- **Raspberry Pi 4** (oder ähnlich, min. 2GB RAM empfohlen)
+
+
+
 ```bash
 
-cp config/config.yaml.example config/config.yaml- **Einstellungs-Editor**: Alle Parameter über Web-UI anpassbar
+python3 tests/test_web_updates.py   # Simulated test
 
-nano config/config.yaml
-
-```### Software- **Mobile-optimiert**: Responsive Design für Smartphone/Tablet
+``````bash- **USB CD/DVD-Laufwerk**
 
 
 
-**Important Settings:**- **Raspberry Pi OS** (Debian Bookworm or newer)- **Live-Logs**: Echtzeit-Log-Anzeige im Browser
+---sudo ./install-service.sh
 
 
 
-```yaml- **Python 3.8+**
-
-ripper:
-
-  device: /dev/sr0  # Your CD drive- **Root Access** (for systemd service)### 🔧 Technische Features
-
-  
-
-sync:- **Systemd-Service**: Automatischer Start beim Boot
-
-  enabled: true
-
-  host: 10.10.1.3  # Your NAS/Server## 🚀 Installation- **Fehlertoleranz**: Retry-Logik und robustes Error-Handling
-
-  user: your_username
-
-  password: your_password  # Better: Use SSH keys!- **Status-Persistence**: SharedStatus via JSON-File mit fcntl-Locking
-
-  remote_paths:
-
-    category_1: /path/to/kids### 1. Clone Repository- **Konfigurierbar**: YAML-basierte Konfiguration
-
-    category_2: /path/to/audiobooks
-
-    category_3: /path/to/music- **Vollständiges Logging**: Audit-Trail aller Operationen
+## Credits```### 2. Install System Dependencies- **Netzwerk-Zugang** für MusicBrainz und Server-Sync
 
 
 
-output:```bash
+- **cdparanoia** - CD ripping with error correction
 
-  local_path: /mnt/dietpi_userdata/rips  # Local output
+- **MusicBrainz** - CD metadata database
 
-cd ~## 📋 Voraussetzungen
+- **Flask** - Web frameworkThe script:
 
-web_interface:
-
-  port: 5000git clone https://github.com/dmyrenne/cd-ripper.git
-
-  language: en  # en (English) or de (Deutsch)
-
-```cd cd-ripper### Hardware
-
-
-
-### 5. Install Service```- **Raspberry Pi 4** (oder ähnlich, min. 2GB RAM empfohlen)
-
-
-
-```bash- **USB CD/DVD-Laufwerk**
-
-sudo ./install-service.sh
-
-```### 2. Install System Dependencies- **Netzwerk-Zugang** für MusicBrainz und Server-Sync
-
-
-
-The script:
+- **mutagen** - Audio tagging
 
 - Copies the systemd service file
 
+---
+
 - Enables auto-start on boot```bash### Software
+
+## License
 
 - Starts the service
 
+MIT License - see [LICENSE](LICENSE)
+
 sudo apt-get update- **Raspberry Pi OS** (Debian Bookworm oder neuer)
+
+## Support
 
 ### 6. Open Web Interface
 
-sudo apt-get install -y \- **Python 3.8+**
+- **Issues:** [GitHub Issues](https://github.com/dmyrenne/cd-ripper/issues)
 
-```
+- **Discussions:** [GitHub Discussions](https://github.com/dmyrenne/cd-ripper/discussions)sudo apt-get install -y \- **Python 3.8+**
 
-http://<raspberry-pi-ip>:5000    cdparanoia \- **Root-Zugriff** (für systemd-Service)
+
+
+---```
+
+
+
+**Made with ❤️ for music lovers | Runs on Raspberry Pi 4**http://<raspberry-pi-ip>:5000    cdparanoia \- **Root-Zugriff** (für systemd-Service)
+
 
 ```
 
