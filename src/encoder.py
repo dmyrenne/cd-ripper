@@ -25,7 +25,7 @@ class AudioEncoder:
         """
         self.config = config
         self.logger = logging.getLogger('cd_ripper.encoder')
-        self.profiles = config.get('ripper', {}).get('profiles', {})
+        self.profiles = config.get('encoder', {}).get('profiles', {})
     
     def get_profile(self, category: int) -> Dict[str, Any]:
         """
@@ -37,8 +37,12 @@ class AudioEncoder:
         Returns:
             Profil-Dictionary
         """
-        category_key = f"category_{category}"
-        profile = self.profiles.get(category_key, self.profiles.get('category_3'))
+        # Kategorie 1 und 2 nutzen MP3, Kategorie 3 FLAC
+        if category in [1, 2]:
+            profile = self.profiles.get('category_1_2', {})
+        else:
+            profile = self.profiles.get('category_3', {})
+        
         self.logger.debug(f"Profil für Kategorie {category}: {profile}")
         return profile
     

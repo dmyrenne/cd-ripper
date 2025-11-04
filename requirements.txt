@@ -18,5 +18,15 @@ flask-cors>=4.0.0
 # Logging & Config
 # pyyaml - via apt: python3-yaml
 
+# Display (optional)
+adafruit-circuitpython-rgb-display>=3.14.0
+# Pillow - via apt: python3-pil
+
+# Display (optional)
+ST7789>=0.0.4
+Pillow>=10.0.0
+RPi.GPIO>=0.7.1
+
+# System Tools (via apt)
 # Image Processing (für Cover-Art)
 # pillow - via apt: python3-pil

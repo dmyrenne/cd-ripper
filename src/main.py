@@ -21,6 +21,7 @@ from tagger import AudioTagger
 from syncer import ServerSyncer
 from utils import setup_logging, sanitize_filename
 from shared_status import SharedStatus
+from display_manager import DisplayManager
 
 
 class CDRipperService:
@@ -61,6 +62,13 @@ class CDRipperService:
         
         # Shared Status für Web-Interface
         self.shared_status = SharedStatus()
+        
+        # Cover-Path für Display
+        self.current_cover_path = None
+        
+        # Display Manager
+        display_config = self.config.get('display', {})
+        self.display = DisplayManager(display_config)
         
         # Output-Verzeichnis
         self.output_dir = Path(self.config.get('output', {}).get('local_path', '/mnt/dietpi_userdata/rips'))
@@ -115,12 +123,21 @@ class CDRipperService:
             if cd_info.cover_data:
                 cover_path = self.shared_status.save_cover(cd_info.cover_data, "/tmp")
             
+            # Cover-Path für Display speichern
+            self.current_cover_path = cover_path
+            
             self.shared_status.update_cd(
                 name=cd_info.album,
                 artist=cd_info.artist,
                 cover_path=cover_path
             )
             self.shared_status.set_processing(True)
+            
+            # Display aktualisieren
+            self.display.show_cd_info(
+                {'name': cd_info.album, 'artist': cd_info.artist},
+                cover_path
+            )
             
             # 2. Kategorisieren
             self.logger.info("Schritt 2/6: Kategorisierung")
@@ -162,6 +179,7 @@ class CDRipperService:
                 # Progress Update: Start Track
                 progress = int((track_num - 1) / len(cd_info.tracks) * 100)
                 self.shared_status.update_progress('ripping', progress, track_num, len(cd_info.tracks))
+                self.display.show_progress('ripping', progress, track_num, len(cd_info.tracks), self.current_cover_path)
                 
                 success = self.ripper.rip_track(
                     track_num,
@@ -175,6 +193,7 @@ class CDRipperService:
                     # Progress Update: Track completed
                     progress = int(track_num / len(cd_info.tracks) * 100)
                     self.shared_status.update_progress('ripping', progress, track_num, len(cd_info.tracks))
+                    self.display.show_progress('ripping', progress, track_num, len(cd_info.tracks), self.current_cover_path)
                 else:
                     self.logger.error(f"✗ Track {track_num} fehlgeschlagen")
             
@@ -199,6 +218,7 @@ class CDRipperService:
                 # Progress Update: Start encoding
                 progress = int((track_num - 1) / len(ripped_files) * 100)
                 self.shared_status.update_progress('encoding', progress, track_num, len(ripped_files))
+                self.display.show_progress('encoding', progress, track_num, len(ripped_files), self.current_cover_path)
                 
                 if profile['format'] == 'mp3':
                     success = self.encoder.encode_to_mp3(
@@ -219,6 +239,7 @@ class CDRipperService:
                     # Progress Update: Encoding completed
                     progress = int(track_num / len(ripped_files) * 100)
                     self.shared_status.update_progress('encoding', progress, track_num, len(ripped_files))
+                    self.display.show_progress('encoding', progress, track_num, len(ripped_files), self.current_cover_path)
                     # WAV-Datei löschen nach Encoding
                     Path(wav_file).unlink()
                 else:
@@ -256,6 +277,7 @@ class CDRipperService:
                 # Progress Update: Start tagging
                 progress = int((track_num - 1) / len(encoded_files) * 100)
                 self.shared_status.update_progress('tagging', progress, track_num, len(encoded_files))
+                self.display.show_progress('tagging', progress, track_num, len(encoded_files), self.current_cover_path)
                 
                 success = self.tagger.tag_file(
                     audio_file,
@@ -268,6 +290,7 @@ class CDRipperService:
                     # Progress Update: Tagging completed
                     progress = int(track_num / len(encoded_files) * 100)
                     self.shared_status.update_progress('tagging', progress, track_num, len(encoded_files))
+                    self.display.show_progress('tagging', progress, track_num, len(encoded_files), self.current_cover_path)
                 else:
                     self.logger.warning(f"⚠ Track {track_num} Tagging fehlgeschlagen")
             
@@ -279,6 +302,7 @@ class CDRipperService:
                 def sync_progress_callback(progress):
                     self.logger.info(f"Sync Progress: {progress}%")
                     self.shared_status.update_progress('syncing', progress, 0, 0)
+                    self.display.show_progress('syncing', progress, None, None, self.current_cover_path)
                 
                 success = self.syncer.sync_directory(
                     str(album_dir.parent),
@@ -307,10 +331,15 @@ class CDRipperService:
             self.logger.info("✅ CD-Verarbeitung erfolgreich abgeschlossen!")
             self.logger.info("=" * 60)
             
+            # Cover-Path zurücksetzen
+            self.current_cover_path = None
+            
             return True
             
         except Exception as e:
             self.logger.error(f"Fehler bei CD-Verarbeitung: {e}", exc_info=True)
+            # Cover-Path zurücksetzen
+            self.current_cover_path = None
             return False
         finally:
             self.processing = False
@@ -362,8 +391,12 @@ class CDRipperService:
                     # CD verarbeiten
                     success = self.process_cd()
                     
-                    if not success:
+                    if success:
+                        self.display.show_done()
+                        time.sleep(3)  # "Fertig" kurz anzeigen
+                    else:
                         self.logger.error("CD-Verarbeitung fehlgeschlagen")
+                        self.display.show_error("CD-Verarbeitung fehlgeschlagen")
                         # Warte vor erneutem Versuch
                         time.sleep(30)
                 elif not cd_info.present and last_cd_present:
@@ -373,6 +406,7 @@ class CDRipperService:
                     
                     # Status für Web-Interface löschen
                     self.shared_status.clear()
+                    self.display.show_idle()
                     self.logger.info("Status erfolgreich zurückgesetzt")
                 
                 # Polling-Intervall
@@ -393,6 +427,7 @@ class CDRipperService:
         """
         self.logger.info("Service wird heruntergefahren...")
         self.running = False
+        self.display.cleanup()
 
 
 def main():

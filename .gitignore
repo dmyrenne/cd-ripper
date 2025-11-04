@@ -63,6 +63,10 @@ config/config.backup.*.yaml
 htmlcov/
 .tox/
 tests/__pycache__/
+tests/*
+logs
+output
+display_manager_old.py
 
 # System
 .directory

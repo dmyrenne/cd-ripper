@@ -8,7 +8,7 @@ import logging
 from pathlib import Path
 
 # Logging Setup
-log_file = Path(__file__).parent / "logs" / "ripper.log"
+log_file = Path(__file__).parent.parent / "logs" / "ripper.log"
 log_file.parent.mkdir(exist_ok=True)
 
 logger = logging.getLogger('cd_ripper')
