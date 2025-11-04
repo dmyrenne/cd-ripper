@@ -28,19 +28,29 @@ class ServerSyncer:
         
         # Sync-Konfiguration
         sync_config = config.get('sync', {})
-        self.server = sync_config.get('server', '10.10.1.3')
-        self.user = sync_config.get('user', 'media')
+        self.server = sync_config.get('host', sync_config.get('server', ''))
+        self.user = sync_config.get('user', '')
         self.password = sync_config.get('password', '')
         self.method = sync_config.get('method', 'rsync')
         self.compression = sync_config.get('compression', True)
-        self.delete_after_sync = sync_config.get('cleanup_temp', True)  # Lokal löschen nach Sync
+        self.delete_after_sync = sync_config.get('cleanup', sync_config.get('cleanup_temp', True))
         
-        # Remote-Pfade pro Kategorie
+        # Remote-Pfade pro Kategorie aus Config
+        remote_paths_config = sync_config.get('remote_paths', {})
         self.remote_paths = {
-            1: sync_config.get('remote_path_category_1', '/mnt/SSD-1TB/dietpi_userdata/Music/Kids'),
-            2: sync_config.get('remote_path_category_2', '/mnt/SSD-1TB/dietpi_userdata/Audiobooks'),
-            3: sync_config.get('remote_path_category_3', '/mnt/SSD-1TB/dietpi_userdata/Music')
+            1: remote_paths_config.get('category_1', ''),
+            2: remote_paths_config.get('category_2', ''),
+            3: remote_paths_config.get('category_3', '')
         }
+        
+        # Validierung
+        if not self.server:
+            self.logger.warning("Kein Server-Host in Config angegeben")
+        if not self.user:
+            self.logger.warning("Kein SSH-User in Config angegeben")
+        for cat, path in self.remote_paths.items():
+            if not path:
+                self.logger.warning(f"Kein Remote-Pfad für Kategorie {cat} in Config angegeben")
         
     def get_remote_path(self, category: int) -> str:
         """
@@ -99,6 +109,64 @@ class ServerSyncer:
             self.logger.error(f"Unbekannte Sync-Methode: {self.method}")
             return False
     
+    def _ensure_remote_directory(self, remote_target: str) -> bool:
+        """
+        Stellt sicher, dass das Remote-Verzeichnis existiert
+        
+        Args:
+            remote_target: Remote-Ziel (user@host:path)
+            
+        Returns:
+            True bei Erfolg
+        """
+        # Extrahiere Pfad aus user@host:path
+        if ':' not in remote_target:
+            self.logger.error(f"Ungültiges Remote-Target: {remote_target}")
+            return False
+        
+        remote_host, remote_path = remote_target.rsplit(':', 1)
+        # Entferne trailing slash
+        remote_path = remote_path.rstrip('/')
+        
+        self.logger.debug(f"Erstelle Remote-Verzeichnis: {remote_path} auf {remote_host}")
+        
+        # SSH-Kommando zum Erstellen des Verzeichnisses
+        ssh_cmd = []
+        
+        if self.password:
+            ssh_cmd.extend(['sshpass', '-p', self.password])
+        
+        ssh_cmd.extend([
+            'ssh',
+            '-o', 'StrictHostKeyChecking=no',
+            '-o', 'UserKnownHostsFile=/dev/null',
+            '-o', 'LogLevel=ERROR',
+            remote_host,
+            f'mkdir -p "{remote_path}"'
+        ])
+        
+        try:
+            result = subprocess.run(
+                ssh_cmd,
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if result.returncode == 0:
+                self.logger.debug(f"Remote-Verzeichnis bereit: {remote_path}")
+                return True
+            else:
+                self.logger.error(f"Fehler beim Erstellen des Remote-Verzeichnisses: {result.stderr}")
+                return False
+                
+        except subprocess.TimeoutExpired:
+            self.logger.error("Timeout beim Erstellen des Remote-Verzeichnisses")
+            return False
+        except Exception as e:
+            self.logger.error(f"Fehler beim Erstellen des Remote-Verzeichnisses: {e}")
+            return False
+    
     def _sync_with_rsync(self, local_path: str, remote_target: str,
                          progress_callback: Optional[Callable[[int], None]] = None) -> bool:
         """
@@ -112,6 +180,11 @@ class ServerSyncer:
         Returns:
             True bei Erfolg
         """
+        # Remote-Verzeichnis erstellen, falls es nicht existiert
+        if not self._ensure_remote_directory(remote_target):
+            self.logger.error("Konnte Remote-Verzeichnis nicht erstellen")
+            return False
+        
         # rsync-Optionen
         rsync_cmd = []
         
@@ -137,7 +210,8 @@ class ServerSyncer:
         ])
         
         # Quelle und Ziel
-        rsync_cmd.append(local_path + '/')
+        # KEIN trailing slash - damit wird der Artist-Ordner selbst übertragen
+        rsync_cmd.append(local_path)
         rsync_cmd.append(remote_target)
         
         # Maskiere Passwort im Log
