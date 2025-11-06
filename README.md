@@ -1,3 +1,5 @@
+**Disclaimer:** I can't code Python, so I completely generated this code with VS Code and the Copilot using Sonnet 4.5
+
 # CD-Ripper
 
 Automatic CD ripping service that detects audio CDs, identifies them via MusicBrainz, rips to MP3/FLAC, and syncs to your server.
